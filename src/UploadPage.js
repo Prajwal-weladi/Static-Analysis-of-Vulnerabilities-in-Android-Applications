@@ -8,8 +8,8 @@ const PageContainer = styled.div`
     background: linear-gradient(135deg, #667eea, #764ba2);
     padding: 20px;
     box-sizing: border-box;
-    margin-top: 40px; /* Increase this value to push the content further down */
-    position: relative;
+    margin-top: 40px; /* Adjusted to move the entire content down */
+    position: relative; /* Make sure the ProfileSection is positioned relative to this container */
 `;
 
 const Sidebar = styled.div`
@@ -20,7 +20,6 @@ const Sidebar = styled.div`
     padding: 20px;
     margin-right: 20px;
     box-sizing: border-box;
-    position: relative;
 `;
 
 const Content = styled.div`
@@ -33,29 +32,15 @@ const Content = styled.div`
 `;
 
 const Section = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 40px; /* Increased to create more space between sections */
 `;
 
 const Title = styled.h2`
-    color: ${props => (props.isActive ? "#667eea" : "#333")}; /* Highlight color when active */
+    color: #333;
     font-family: 'Montserrat', sans-serif;
     margin-bottom: 15px;
     font-size: 22px;
-    display: flex;
-    align-items: center;
-    cursor: pointer; /* Make title clickable */
-    position: relative; /* Position relative for arrow positioning */
-    padding-left: 30px; /* Space for the arrow */
-    
-    &:before {
-        content: '▲'; /* Arrow pointing up */
-        font-size: 14px;
-        color: ${props => (props.isActive ? "#667eea" : "#333")}; /* Match arrow color with text */
-        position: absolute;
-        left: 10px; /* Space from the text */
-        transition: transform 0.3s ease;
-        transform: ${props => (props.isActive ? 'rotate(180deg)' : 'rotate(0deg)')}; /* Rotate arrow when active */
-    }
+    text-align: left;
 `;
 
 const Button = styled.button`
@@ -86,16 +71,17 @@ const Input = styled.input`
 
 const ProfileSection = styled.div`
     position: absolute;
-    top: 20px; /* Adjust as needed */
-    left: 20px; /* Adjust as needed */
-    background: #000;
+    top: 30px;
+    left: 30px;
+    background: #000; /* Black background */
     color: #fff;
     border-radius: 10px;
     display: flex;
     align-items: center;
     padding: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensure it's on top */
+    z-index: 10;
+    width: auto; /* Adjust width to fit content */
 `;
 
 const ProfileImage = styled.img`
@@ -119,46 +105,46 @@ const Email = styled.div`
     font-size: 14px;
 `;
 
-const Dropdown = styled.div`
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 10px;
-    padding: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-    position: absolute;
-    top: 120px; /* Adjust as needed */
-    left: 0;
-    width: 100%;
-    z-index: 100;
+const DropdownContainer = styled.div`
+    margin-top: 20px;
 `;
 
-const DropdownItem = styled.div`
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+const DropdownTitle = styled.div`
+    display: flex;
+    align-items: center;
     cursor: pointer;
-
-    &:last-child {
-        border-bottom: none;
-    }
-
+    color: #333;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
     &:hover {
-        background: #f0f0f0;
+        color: #667eea; /* Highlight text when hovered */
     }
 `;
 
-const PreviousSubmissionsSection = styled(Section)`
-    margin-top: 40px; /* Adjust this value to move the section further down */
+const DropdownArrow = styled.span`
+    margin-right: 10px;
+    transform: ${props => (props.isOpen ? "rotate(90deg)" : "rotate(0deg)")};
+    transition: transform 0.3s ease;
+`;
+
+const DropdownContent = styled.div`
+    display: ${props => (props.isOpen ? "block" : "none")};
+    padding-left: 20px;
+    font-size: 16px;
+    background-color: #000; /* Change the background color to black */
+    color: #fff; /* Change the text color to white */
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
 `;
 
 function UploadPage() {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [submissions] = useState([
-        { title: "Submission 1", details: "Details about submission 1" },
-        { title: "Submission 2", details: "Details about submission 2" },
-        { title: "Submission 3", details: "Details about submission 3" }
-    ]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
     return (
         <PageContainer>
@@ -167,24 +153,19 @@ function UploadPage() {
                     <Title>Previous Reports</Title>
                     {/* Add previous reports elements here */}
                 </Section>
-                <PreviousSubmissionsSection>
-                    <Title 
-                        onClick={() => setDropdownOpen(!dropdownOpen)} 
-                        isActive={dropdownOpen}
-                    >
-                        Previous Submissions
-                    </Title>
-                    {dropdownOpen && (
-                        <Dropdown>
-                            {submissions.map((submission, index) => (
-                                <DropdownItem key={index}>
-                                    <strong>{submission.title}</strong>
-                                    <p>{submission.details}</p>
-                                </DropdownItem>
-                            ))}
-                        </Dropdown>
-                    )}
-                </PreviousSubmissionsSection>
+                <Section>
+                    <DropdownContainer>
+                        <DropdownTitle onClick={toggleDropdown}>
+                            <DropdownArrow isOpen={isDropdownOpen}>▶</DropdownArrow>
+                            Previous Submissions
+                        </DropdownTitle>
+                        <DropdownContent isOpen={isDropdownOpen}>
+                            <p>Chrome.apk</p>
+                            <p>Uber.apk</p>
+                            <p>ClashOfClans.apk</p>
+                        </DropdownContent>
+                    </DropdownContainer>
+                </Section>
                 <Section>
                     <Title>Submit GitHub Repository</Title>
                     <Input type="text" placeholder="Enter GitHub URL" />
