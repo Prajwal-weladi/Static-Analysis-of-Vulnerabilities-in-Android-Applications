@@ -1,212 +1,116 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const PageContainer = styled.div`
     display: flex;
-    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     width: 100vw;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    padding: 20px;
-    box-sizing: border-box;
-    margin-top: 40px; /* Adjusted to move the entire content down */
-    position: relative; /* Make sure the ProfileSection is positioned relative to this container */
+    background: linear-gradient(135deg, #141E30, #243B55), url('video.mp4') no-repeat center center fixed;
+    background-size: cover;
+    text-align: center;
 `;
 
-const Sidebar = styled.div`
-    width: 25%;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    margin-right: 20px;
-    box-sizing: border-box;
+const CardContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
 `;
 
-const Content = styled.div`
-    flex: 1;
-    background: #f7f7f7;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    box-sizing: border-box;
-`;
-
-const Section = styled.div`
-    margin-bottom: 40px; /* Increased to create more space between sections */
-`;
-
-const Title = styled.h2`
-    color: #333;
-    font-family: 'Montserrat', sans-serif;
-    margin-bottom: 15px;
-    font-size: 22px;
-    text-align: left;
-`;
-
-const Button = styled.button`
-    background: #667eea;
-    border: none;
-    border-radius: 50px;
-    color: white;
-    padding: 10px 20px;
+const Card = styled.div`
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 350px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 10px;
+    transition: 0.3s;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &:hover {
+        transform: scale(1.08);
+        background: rgba(255, 255, 255, 0.2);
+    }
+`;
+
+const Title = styled.h1`
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+`;
+
+const StyledButton = styled(Link)`
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea, #5a67d8);
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    margin-top: 15px;
     transition: background 0.3s ease;
 
     &:hover {
-        background: #5a67d8;
+        background: linear-gradient(135deg, #34d399, #10b981);
     }
 `;
 
-const Input = styled.input`
+const CardImage = styled.img`
     width: 100%;
-    padding: 10px 15px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
     border-radius: 10px;
-    box-sizing: border-box;
+    margin-bottom: 15px;
 `;
 
-const ProfileSection = styled.div`
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    background: #000; /* Black background */
-    color: #fff;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-    width: auto; /* Adjust width to fit content */
-`;
-
-const ProfileImage = styled.img`
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    margin-right: 10px;
-`;
-
-const ProfileDetails = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const Name = styled.div`
-    font-weight: bold;
-`;
-
-const Email = styled.div`
-    font-size: 14px;
-`;
-
-const DropdownContainer = styled.div`
-    margin-top: 20px;
-`;
-
-const DropdownTitle = styled.div`
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    color: #333;
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 10px;
-    &:hover {
-        color: #667eea; /* Highlight text when hovered */
-    }
-`;
-
-const DropdownArrow = styled.span`
-    margin-right: 10px;
-    transform: ${props => (props.isOpen ? "rotate(90deg)" : "rotate(0deg)")};
-    transition: transform 0.3s ease;
-`;
-
-const DropdownContent = styled.div`
-    display: ${props => (props.isOpen ? "block" : "none")};
-    padding-left: 20px;
+const CardDescription = styled.p`
     font-size: 16px;
-    background-color: #000; /* Change the background color to black */
-    color: #fff; /* Change the text color to white */
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
+    line-height: 1.5;
+    opacity: 0.9;
 `;
 
-function UploadPage() {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const HighlightText = styled.span`
+    color: #34d399;
+    font-weight: bold;
+`;
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
-
+function AnalysisSelectionPage() {
     return (
         <PageContainer>
-            <Sidebar>
-                <Section>
-                    <Title>Previous Reports</Title>
-                    {/* Add previous reports elements here */}
-                </Section>
-                <Section>
-                    <DropdownContainer>
-                        <DropdownTitle onClick={toggleDropdown}>
-                            <DropdownArrow isOpen={isDropdownOpen}>▶</DropdownArrow>
-                            Previous Submissions
-                        </DropdownTitle>
-                        <DropdownContent isOpen={isDropdownOpen}>
-                            <p>Chrome.apk</p>
-                            <p>Uber.apk</p>
-                            <p>ClashOfClans.apk</p>
-                        </DropdownContent>
-                    </DropdownContainer>
-                </Section>
-                <Section>
-                    <Title>Submit GitHub Repository</Title>
-                    <Input type="text" placeholder="Enter GitHub URL" />
-                    <Button>Submit</Button>
-                </Section>
-            </Sidebar>
-            <Content>
-                <Section>
-                    <Title>Report Resolve</Title>
-                    {/* Add report resolution details here */}
-                </Section>
-                <Section>
-                    <Title>Current Projects</Title>
-                    {/* Add current projects details here */}
-                </Section>
-                <Section>
-                    <Title>Upload APK File</Title>
-                    <Input type="file" />
-                    <Button>Upload & Analyze</Button>
-                </Section>
-                <Section>
-                    <Title>Vulnerabilities Analysis</Title>
-                    <ul>
-                        <li>Static Analysis</li>
-                        <li>Configuration Analysis</li>
-                        <li>External Dependencies</li>
-                    </ul>
-                </Section>
-            </Content>
-            <ProfileSection>
-                <ProfileImage 
-                    src="https://via.placeholder.com/50" /* Replace with your profile image URL */
-                    alt="Profile"
-                />
-                <ProfileDetails>
-                    <Name>Prajwal Weladi</Name> {/* Replace with dynamic name */}
-                    <Email>prajwal.weladi22@vit.edu</Email> {/* Replace with dynamic email */}
-                </ProfileDetails>
-            </ProfileSection>
+            <div>
+                <Title>Choose Your AI Analysis</Title>
+                <CardContainer>
+                    <Card onClick={() => window.open('http://localhost:8501', '_blank')}>
+                        <CardImage src="/ana1.jpg" alt="Analysis 1" />
+                        <h2>Recommendation System-1</h2>
+                        <CardDescription>
+                           Leverage the power of <HighlightText>Product recommendation analytics</HighlightText>. Gain insights into user behavior, identify purchasing patterns.
+                        </CardDescription>
+                        <StyledButton to="#">Explore Analysis 1</StyledButton>
+                    </Card>
+                    <Card onClick={() => window.open('http://localhost:8502', '_blank')}>
+                        <CardImage src="/ana2.jpg " alt="Analysis 2" />
+                        <h2>Recommendation System-2</h2>
+                        <CardDescription>
+                          This is the Second System <HighlightText>We</HighlightText> Designed. Optimize recommendations with <HighlightText>real-time trend analysis</HighlightText> and <HighlightText>interactive visual dashboards</HighlightText>.
+                        </CardDescription>
+                        <StyledButton to="#">Explore Analysis 2</StyledButton>
+                    </Card>
+                </CardContainer>
+            </div>
         </PageContainer>
     );
 }
 
-export default UploadPage;
+export default AnalysisSelectionPage;
